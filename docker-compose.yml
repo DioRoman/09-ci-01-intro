@@ -1,0 +1,58 @@
+# Описание сервисов
+services:
+  jiradb:
+    # Используем официальный образ PostgreSQL версии 16
+    image: postgres:16
+    container_name: jiradb
+    environment:
+      # Параметры создания базы данных и пользователя
+      POSTGRES_USER: jiradbuser
+      POSTGRES_PASSWORD: StrongPassword   # поменяйте на ваш пароль
+      POSTGRES_DB: jiradb
+    volumes:
+      # Именованный том для хранения данных PostgreSQL (устойчивость данных)
+      - jiradb_data:/var/lib/postgresql/data
+    ports:
+      # Проброс порта 5432 для подключения к БД с хоста
+      - '5432:5432'
+    networks:
+      - jiranet
+
+  jira:
+    # Официальный образ Jira Software версии 10.6.0
+    image: atlassian/jira-software:10.6.0
+    container_name: jira
+    depends_on:
+      - jiradb   # Запускать после базы данных
+    environment:
+      # Параметры подключения Jira к PostgreSQL
+      ATL_JDBC_URL: jdbc:postgresql://jiradb:5432/jiradb
+      ATL_JDBC_USER: jiradbuser
+      ATL_JDBC_PASSWORD: StrongPassword   # должен совпадать с POSTGRES_PASSWORD
+      ATL_DB_TYPE: postgres72
+      ATL_DB_DRIVER: org.postgresql.Driver
+      # Настройки JVM
+      JVM_MINIMUM_MEMORY: 2048m
+      JVM_MAXIMUM_MEMORY: 8192m
+      # Настройки прокси (если нужно)
+      ATL_PROXY_NAME: localhost
+      ATL_PROXY_PORT: 8080
+      ATL_TOMCAT_SCHEME: http
+    volumes:
+      # Том для хранения данных и конфигурации Jira между перезапусками
+      - jira_data:/var/atlassian/application-data/jira
+    ports:
+      # Проброс порта 8080 для доступа к Jira из браузера
+      - '8080:8080'
+    networks:
+      - jiranet
+
+# Описание именованных томов Docker для хранения данных вне контейнеров  
+volumes:
+  jiradb_data:
+  jira_data:
+
+# Настройка пользовательской сети Docker для внутриконтейнерного общения  
+networks:
+  jiranet:
+    driver: bridge
