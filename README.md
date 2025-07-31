@@ -23,3 +23,9 @@ https://github.com/DioRoman/09-ci-01-intro/blob/main/docker-compose.yml
 https://github.com/DioRoman/09-ci-01-intro/blob/main/All.xml
 
 https://github.com/DioRoman/09-ci-01-intro/blob/main/Bug.xml
+
+#### Провел созданные задачи типа epic и Ошибка через Бизнес-процессы до итогового требуемого состояния.
+
+<img width="2514" height="685" alt="Снимок экрана 2025-07-31 225220" src="https://github.com/user-attachments/assets/8ad77eb2-60ee-4197-bf39-1d88523161a7" />
+
+#### Спасибо за внимание!
